@@ -53,6 +53,21 @@
             transform: scale(1.8); /* 调整复选框的大小 */
             margin-right: 5px; /* 为了给复选框和标签之间留出一些空间 */
         }
+	.image-container {
+            position: relative;
+            margin-top: auto;
+            width: 100%; /* 新增這行以撐開 container */
+            box-sizing: border-box; /* 新增這行以考慮邊界和填充 */
+        }
+
+        img {
+            width: 200px;
+            height: auto;
+            margin: 10px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
     </style>
 </head>
 <body>
@@ -422,5 +437,9 @@ function stopTimer() {
     // console.log("總共花費時間：" + seconds + " 秒");
 }
     </script>
+    <div class="image-container">
+        <img src="C:\Users\sjaso\Pictures\Screenshots/S__28778585.jpg" alt="I love you, Tomoyo">
+
+    </div>	
 </body>
 </html>
