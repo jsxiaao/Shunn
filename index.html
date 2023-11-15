@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,24 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
         }
 
         h1 {
             text-align: center;
+            margin: 20px 0;
         }
 
         nav {
             display: flex;
-            justify-content: space-around;
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
         }
 
@@ -26,22 +35,51 @@
             padding: 10px;
             border: 1px solid #333;
             border-radius: 5px;
+            margin-bottom: 10px;
         }
 
         nav a:hover {
             background-color: #eee;
         }
+
+        .image-container {
+            position: relative;
+            margin-top: auto;
+            width: 100%; /* 新增這行以撐開 container */
+            box-sizing: border-box; /* 新增這行以考慮邊界和填充 */
+        }
+
+        img {
+            width: 200px;
+            height: auto;
+            margin: 10px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
+
 <body>
 
-<h1>日本語の勉強</h1>
+    <h1>日本語の勉強</h1>
 
-<nav>
-    <a href="Japanese.html">Hiragana & Katakana</a>
-    <a href="practice.html">Vocabulary</a>
-    <a href="Test.html">Test your self(Look forward to it soon)</a>
-</nav>
+    <nav>
+        <a href="Japanese.html">Hiragana & Katakana</a>
+        <a href="practice.html">Vocabulary</a>
+        <a href="Test.html">Test yourself (Look forward to it soon)</a>
+    </nav>
+
+    <div class="image-container">
+        <img src="C:\Users\sjaso\Pictures\Screenshots/S__28778585.jpg" alt="I love you, Tomoyo">
+
+    </div>
 
 </body>
+
 </html>
