@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五十音練習機</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+	    	-webkit-user-select: none; /* Chrome, Safari, Opera */
+    		-moz-user-select: none; /* Firefox */
+    		-ms-user-select: none; /* Internet Explorer/Edge */
+    		user-select: none; /* Standard syntax */
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: green;
+        }
+
+        #remainingQuestions {
+            margin-top: 10px;
+            color: blue;
+        }
+        
+        #kanaSelection {
+            margin-top: 20px;
+	    display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+	 #kanaTable {
+            border-collapse: collapse;
+            width: 70%;
+        }
+
+        #kanaTable td {
+            padding: 6px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 18px; /* 调整字体大小 */
+        }	
+	#kanaTable input[type="checkbox"] {
+            transform: scale(1.8); /* 调整复选框的大小 */
+            margin-right: 5px; /* 为了给复选框和标签之间留出一些空间 */
+        }
+    </style>
+</head>
+<body>
+    <h1>五十音練習機</h1>
+    
+    <label for="kana">片假名：</label>
+    <select id="kana" disabled>
+    <option value="あ">あ (ア)</option>
+    <option value="い">い (イ)</option>
+    <option value="う">う (ウ)</option>
+    <option value="え">え (エ)</option>
+    <option value="お">お (オ)</option>
+
+    <option value="か">か (カ)</option>
+    <option value="き">き (キ)</option>
+    <option value="く">く (ク)</option>
+    <option value="け">け (ケ)</option>
+    <option value="こ">こ (コ)</option>
+
+    <option value="さ">さ (サ)</option>
+    <option value="し">し (シ)</option>
+    <option value="す">す (ス)</option>
+    <option value="せ">せ (セ)</option>
+    <option value="そ">そ (ソ)</option>
+
+    <option value="た">た (タ)</option>
+    <option value="ち">ち (チ)</option>
+    <option value="つ">つ (ツ)</option>
+    <option value="て">て (テ)</option>
+    <option value="と">と (ト)</option>
+
+    <option value="な">な (ナ)</option>
+    <option value="に">に (ニ)</option>
+    <option value="ぬ">ぬ (ヌ)</option>
+    <option value="ね">ね (ネ)</option>
+    <option value="の">の (ノ)</option>
+
+    <option value="は">は (ハ)</option>
+    <option value="ひ">ひ (ヒ)</option>
+    <option value="ふ">ふ (フ)</option>
+    <option value="へ">へ (ヘ)</option>
+    <option value="ほ">ほ (ホ)</option>
+
+    <option value="ま">ま (マ)</option>
+    <option value="み">み (ミ)</option>
+    <option value="む">む (ム)</option>
+    <option value="め">め (メ)</option>
+    <option value="も">も (モ)</option>
+
+    <option value="や">や (ヤ)</option>
+    <option value="ゆ">ゆ (ユ)</option>
+    <option value="よ">よ (ヨ)</option>
+
+    <option value="ら">ら (ラ)</option>
+    <option value="り">り (リ)</option>
+    <option value="る">る (ル)</option>
+    <option value="れ">れ (レ)</option>
+    <option value="ろ">ろ (ロ)</option>
+
+    <option value="わ">わ (ワ)</option>
+    <option value="を">を (ヲ)</option>
+    <option value="ん">ん (ン)</option>
+    <!-- 添加其他片假名... -->
+</select>
+
+    <br><br>
+
+    <label for="answer">輸入羅馬拼音：</label>
+    <input type="text" id="answer" onkeydown="checkAnswer(event)">
+
+    <div id="result"></div>
+    <div id="remainingQuestions"></div>
+    <button id="toggleButton" onclick="toggleVisibility()">顯示/隱藏 50音選擇表</button>
+
+    <div id="kanaSelection" style="display: flex;">
+	
+    <table id="kanaTable">
+    <tr>
+    <td><input type="checkbox" id="あCheckbox" checked><label for="あCheckbox">あ (ア)</label></td>
+    <td><input type="checkbox" id="いCheckbox" checked><label for="いCheckbox">い (イ)</label></td>
+    <td><input type="checkbox" id="うCheckbox" checked><label for="うCheckbox">う (ウ)</label></td>
+    <td><input type="checkbox" id="えCheckbox" checked><label for="えCheckbox">え (エ)</label></td>
+    <td><input type="checkbox" id="おCheckbox" checked><label for="おCheckbox">お (オ)</label></td>
+</tr>
+<tr>
+    <td><input type="checkbox" id="かCheckbox" checked><label for="かCheckbox">か (カ)</label></td>
+    <td><input type="checkbox" id="きCheckbox" checked><label for="きCheckbox">き (キ)</label></td>
+    <td><input type="checkbox" id="くCheckbox" checked><label for="くCheckbox">く (ク)</label></td>
+    <td><input type="checkbox" id="けCheckbox" checked><label for="けCheckbox">け (ケ)</label></td>
+    <td><input type="checkbox" id="こCheckbox" checked><label for="こCheckbox">こ (コ)</label></td>
+</tr>
+<tr>
+    <td><input type="checkbox" id="さCheckbox" checked><label for="さCheckbox">さ (サ)</label></td>
+    <td><input type="checkbox" id="しCheckbox" checked><label for="しCheckbox">し (シ)</label></td>
+    <td><input type="checkbox" id="すCheckbox" checked><label for="すCheckbox">す (ス)</label></td>
+    <td><input type="checkbox" id="せCheckbox" checked><label for="せCheckbox">せ (セ)</label></td>
+    <td><input type="checkbox" id="そCheckbox" checked><label for="そCheckbox">そ (ソ)</label></td>
+</tr>
+<tr>
+    <td><input type="checkbox" id="たCheckbox" checked><label for="たCheckbox">た (タ)</label></td>
+    <td><input type="checkbox" id="ちCheckbox" checked><label for="ちCheckbox">ち (チ)</label></td>
+    <td><input type="checkbox" id="つCheckbox" checked><label for="つCheckbox">つ (ツ)</label></td>
+    <td><input type="checkbox" id="てCheckbox" checked><label for="てCheckbox">て (テ)</label></td>
+    <td><input type="checkbox" id="とCheckbox" checked><label for="とCheckbox">と (ト)</label></td>
+</tr>
+<tr>
+    <td><input type="checkbox" id="なCheckbox" checked><label for="なCheckbox">な (ナ)</label></td>
+    <td><input type="checkbox" id="にCheckbox" checked><label for="にCheckbox">に (ニ)</label></td>
+    <td><input type="checkbox" id="ぬCheckbox" checked><label for="ぬCheckbox">ぬ (ヌ)</label></td>
+    <td><input type="checkbox" id="ねCheckbox" checked><label for="ねCheckbox">ね (ネ)</label></td>
+    <td><input type="checkbox" id="のCheckbox" checked><label for="のCheckbox">の (ノ)</label></td>
+</tr>
+<tr>
+    <td><input type="checkbox" id="はCheckbox" checked><label for="はCheckbox">は (ハ)</label></td>
+    <td><input type="checkbox" id="ひCheckbox" checked><label for="ひCheckbox">ひ (ヒ)</label></td>
+    <td><input type="checkbox" id="ふCheckbox" checked><label for="ふCheckbox">ふ (フ)</label></td>
+    <td><input type="checkbox" id="へCheckbox" checked><label for="へCheckbox">へ (ヘ)</label></td>
+    <td><input type="checkbox" id="ほCheckbox" checked><label for="ほCheckbox">ほ (ホ)</label></td>
+</tr>
+<tr>
+    <td><input type="checkbox" id="まCheckbox" checked><label for="まCheckbox">ま (マ)</label></td>
+    <td><input type="checkbox" id="みCheckbox" checked><label for="みCheckbox">み (ミ)</label></td>
+    <td><input type="checkbox" id="むCheckbox" checked><label for="むCheckbox">む (ム)</label></td>
+    <td><input type="checkbox" id="めCheckbox" checked><label for="めCheckbox">め (メ)</label></td>
+    <td><input type="checkbox" id="もCheckbox" checked><label for="もCheckbox">も (モ)</label></td>
+</tr>
+<tr>
+    <td><input type="checkbox" id="やCheckbox" checked><label for="やCheckbox">や (ヤ)</label></td>
+    <td></td>
+    <td><input type="checkbox" id="ゆCheckbox" checked><label for="ゆCheckbox">ゆ (ユ)</label></td>
+    <td></td>
+    <td><input type="checkbox" id="よCheckbox" checked><label for="よCheckbox">よ (ヨ)</label></td>
+</tr>
+<tr>
+    <td><input type="checkbox" id="らCheckbox" checked><label for="らCheckbox">ら (ラ)</label></td>
+    <td><input type="checkbox" id="りCheckbox" checked><label for="りCheckbox">り (リ)</label></td>
+    <td><input type="checkbox" id="るCheckbox" checked><label for="るCheckbox">る (ル)</label></td>
+    <td><input type="checkbox" id="れCheckbox" checked><label for="れCheckbox">れ (レ)</label></td>
+    <td><input type="checkbox" id="ろCheckbox" checked><label for="ろCheckbox">ろ (ロ)</label></td>
+</tr>
+<tr>
+    <td><input type="checkbox" id="わCheckbox" checked><label for="わCheckbox">わ (ワ)</label></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><input type="checkbox" id="をCheckbox" checked><label for="をCheckbox">を (ヲ)</label></td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><input type="checkbox" id="んCheckbox" checked><label for="んCheckbox">ん (ン)</label></td>
+</tr>
+
+</table>
+	<button onclick="selectKana()">確認片假名選擇（可以按住滑鼠後滑動勾選）</button>
+    </div>
+
+    <script>
+        var originalKanaList = ["あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "へ", "ほ", "ま", "み", "む", "め", "も", "や", "ゆ", "よ", "ら", "り", "る", "れ", "ろ", "わ", "を", "ん"];
+        var kanaList = originalKanaList.slice(); // 創建一個複製，以便保留原始列表
+        var answeredQuestions = [];
+        var correctAnswers = [];
+
+        function generateRandomKana() {
+	    // kanaList = originalKanaList.slice();
+            var unansweredQuestions = kanaList.filter(q => !answeredQuestions.includes(q));
+            
+            if (unansweredQuestions.length === 0) {
+		seconds = stopTimer();
+                document.getElementById("result").innerText += "你已經回答過所有的題目！";
+		document.getElementById("result").innerText += "總共花費時間：" + seconds + " 秒";
+                answeredQuestions = []; //清空
+		generateRandomKana();
+                return;
+            }
+	    console.log(unansweredQuestions);
+            var randomIndex = Math.floor(Math.random() * unansweredQuestions.length);
+            var currentKana = unansweredQuestions[randomIndex];
+	    // console.log(currentKana, unansweredQuestions[randomIndex]);
+            document.getElementById("kana").value = currentKana;
+            document.getElementById("kana").disabled = true;
+            document.getElementById("answer").value = "";
+            document.getElementById("answer").focus();
+        }
+
+        function updateRemainingQuestions() {
+            var remainingQuestions = kanaList.length - answeredQuestions.length;
+	    // 在回答第一題時開始計時
+	    if (answeredQuestions.length===1) startTimer();
+            document.getElementById("remainingQuestions").innerText = "剩餘題數：" + remainingQuestions;
+        }
+
+        function selectKana() {
+    // 獲取所有被選擇的元素
+    var selectedElements = Array.from(document.querySelectorAll('#kanaSelection input[type=checkbox]:checked'));
+    
+    // 如果選擇的元素數量為 0，顯示提示框並返回
+    if (selectedElements.length === 0) {
+        alert("請至少選擇一個片假名進行練習！");
+        return;
+    }
+
+    // 更新題庫為選擇的元素的值
+    kanaList = selectedElements.map(element => {
+        const textContent = element.nextElementSibling.textContent;
+        const cleanText = textContent.split('(')[0].trim(); // Extract text before '(' and trim spaces
+        return cleanText;    
+    });
+
+    answeredQuestions = []; //清空
+    updateRemainingQuestions();
+    generateRandomKana();
+}
+
+
+        function checkAnswer(event) {
+            if (event.key === 'Enter') {
+                var userAnswer = document.getElementById("answer").value.toLowerCase();
+		// 獲取<select>元素
+		var selectElement = document.getElementById('kana');
+		// 獲取被選擇的選項的索引
+		var selectedIndex = selectElement.selectedIndex;
+		// 獲取被選擇的選項的值（例如，"あ (ア)"）
+		var selectedValue = selectElement.options[selectedIndex].text;
+                var currentKana = document.getElementById("kana").value;
+                var correctAnswer = getRomaji(currentKana);
+
+                var resultDiv = document.getElementById("result");
+
+                if (userAnswer === correctAnswer) {
+                    resultDiv.style.color = "green";
+                    resultDiv.innerText = "「" + selectedValue + "」" + "你寫的是：" + userAnswer + "，正確！";
+                    correctAnswers.push(currentKana);
+                    answeredQuestions.push(currentKana);
+		    updateRemainingQuestions();
+                    generateRandomKana();
+		    updateRemainingQuestions();
+                } else {
+                    resultDiv.style.color = "red";
+                    resultDiv.innerText = "你寫的是：" + userAnswer + "，錯誤，正確答案是：" + correctAnswer + "「" + selectedValue + "」";
+                    generateRandomKana();
+                }
+
+                document.getElementById("kana").disabled = true;
+            }
+        }
+
+        function getRomaji(kana) {
+            // 在這裡添加片假名到羅馬拼音的映射
+            switch (kana) {
+                case "あ": return "a";
+                case "い": return "i";
+                case "う": return "u";
+                case "え": return "e";
+                case "お": return "o";
+                case "か": return "ka";
+                case "き": return "ki";
+                case "く": return "ku";
+                case "け": return "ke";
+                case "こ": return "ko";
+                case "さ": return "sa";
+                case "し": return "shi";
+                case "す": return "su";
+                case "せ": return "se";
+                case "そ": return "so";
+                case "た": return "ta";
+                case "ち": return "chi";
+                case "つ": return "tsu";
+                case "て": return "te";
+                case "と": return "to";
+                case "な": return "na";
+                case "に": return "ni";
+                case "ぬ": return "nu";
+                case "ね": return "ne";
+                case "の": return "no";
+                case "は": return "ha";
+                case "ひ": return "hi";
+                case "ふ": return "fu";
+                case "へ": return "he";
+                case "ほ": return "ho";
+                case "ま": return "ma";
+                case "み": return "mi";
+                case "む": return "mu";
+                case "め": return "me";
+                case "も": return "mo";
+                case "や": return "ya";
+                case "ゆ": return "yu";
+                case "よ": return "yo";
+                case "ら": return "ra";
+                case "り": return "ri";
+                case "る": return "ru";
+                case "れ": return "re";
+                case "ろ": return "ro";
+                case "わ": return "wa";
+                case "を": return "wo";
+                case "ん": return "n";
+                // 添加其他片假名的映射...
+                default: return "";
+            }
+        }
+
+    function toggleVisibility() {
+        var kanaSelectionDiv = document.getElementById("kanaSelection");
+        if (kanaSelectionDiv.style.display === "none") {
+            kanaSelectionDiv.style.display = "flex"; // Use "flex" to match the initial display property
+        } else {
+            kanaSelectionDiv.style.display = "none";
+        }
+    }
+        // 初始化時更新剩餘題數
+        updateRemainingQuestions();
+        generateRandomKana(); // 初始化時就生成第一個題目
+document.addEventListener('DOMContentLoaded', function() {
+            let isDragging = false;
+	    const labelStates = {};
+
+            const checkboxes = document.querySelectorAll('#kanaTable input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('mousedown', () => {
+                    isDragging = true;
+                    labelStates[checkbox.id] = false;
+                });
+
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+		    labelStates[checkbox.id] = false;
+                });
+		
+                checkbox.addEventListener('mouseover', () => {
+                    if (isDragging && !labelStates[checkbox.id]) {
+                        checkbox.checked = !checkbox.checked;
+                        labelStates[checkbox.id] = true;
+                    }
+                });
+		const label = document.querySelector(`label[for="${checkbox.id}"]`);
+                label.addEventListener('mousedown', () => {
+                    isDragging = true;
+		    labelStates[checkbox.id] = false;
+                });
+                // const label = checkbox.nextElementSibling;
+                label.addEventListener('mouseover', () => {
+                    if (isDragging && !labelStates[checkbox.id]) {
+                        checkbox.checked = !checkbox.checked;
+                        labelStates[checkbox.id] = true;
+                    }
+                });
+            });
+        });
+
+	var startTime; // 變數用於保存開始時間
+var totalTime; // 變數用於保存總共花費的時間
+
+function startTimer() {
+    startTime = new Date(); // 將當前時間設為開始時間
+}
+
+function stopTimer() {
+    var endTime = new Date(); // 將當前時間設為結束時間
+    totalTime = endTime - startTime; // 計算總共花費的時間（毫秒）
+    
+    // 將總時間轉換為秒
+    // var seconds = Math.floor(totalTime / 1000);
+    var seconds = totalTime / 1000;
+    return seconds;
+    // console.log("總共花費時間：" + seconds + " 秒");
+}
+    </script>
+</body>
+</html>
