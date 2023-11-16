@@ -32,14 +32,23 @@
             font-size: 18px;
             cursor: pointer;
         }
+	a img {
+            width: 100px; /* 根據需要的寬度調整 */
+            height: auto; /* 保持比例 */
+        }
     </style>
 </head>
 <body>
 
 <div id="quiz-container">
-    <h1>填空題測驗</h1>
+    <h1>填空題測驗
+	<a href="index.html">
+        <img src="Tomohome.png" alt="回到主頁">
+
+         </a>
+</h1>
     <div id="question"></div>
-    <input type="text" id="answer-input" placeholder="請輸入中文意思">
+    <input type="text" id="answer-input" placeholder="請輸入答案">
     <button id="submit-btn" onclick="checkAnswer()">提交答案</button>
 </div>
 
@@ -133,120 +142,48 @@
         // 添加更多的問題...
     ];
 
-    //每組測驗包含的題數
-    const questionsPerSet = 5;
-
-    // 生成隨機測驗組
-function generateRandomQuizSet() {
-    const shuffledQuestions = quizQuestions.sort(() => Math.random() - 0.5);
-    return shuffledQuestions.slice(0, questionsPerSet);
-}
-
     // 目前的問題索引
-    let currentIndex = 0;
-	
-    // 目前的測驗組索引
-    let currentSetIndex = 0;
-    
+    let currentIndex = 1;
+
     // 初始化測驗
-    function initQuiz() {
-        showQuestion();
-    }
-    
-    //初始化分數
-	let score = 0;
+	function initQuiz() {
+    // 使用 Math.random() 生成一個介於 0 到 quizQuestions.length 之間的浮點數
+    // 然後將其轉換成整數，以作為起始索引
+    currentIndex = Math.floor(Math.random() * quizQuestions.length);
+    showQuestion();
+}
 
     // 顯示問題
     function showQuestion() {
-    const currentQuestion = quizSets[currentSetIndex][currentIndex];
-    document.getElementById('question').innerText = currentQuestion.question;
-}
-
-	// 檢查答案
-function checkAnswer() {
-    const userAnswer = document.getElementById('answer-input').value.toLowerCase();
-    const currentQuestion = quizSets[currentSetIndex][currentIndex];
-
-    // 判斷是否有多重答案
-    if (Array.isArray(currentQuestion.correctAnswers)) {
-        // 有多重答案的情況
-        if (currentQuestion.correctAnswers.includes(userAnswer)) {
-            alert("答對了！");
-	score += 20; //答對加分
-        } else {
-            alert(`答錯了，正確答案是：${currentQuestion.correctAnswers.join(" 或 ")}`);
-        }
-    } else if (currentQuestion.correctAnswers) { // 確保有正確答案再進行判斷
-        // 單一答案的情況
-        if (userAnswer === currentQuestion.correctAnswers.toLowerCase()) {
-            alert("答對了！");
-	    score += 20;
-        } else {
-            alert(`答錯了，正確答案是：${currentQuestion.correctAnswers}`);
-        }
+        const currentQuestion = quizQuestions[currentIndex];
+        document.getElementById('question').innerText = currentQuestion.question;
     }
 
-    // 顯示下一個問題或結束
-    currentIndex++;
+    // 檢查答案
+    function checkAnswer() {
+        const userAnswer = document.getElementById('answer-input').value.toLowerCase();
+        const currentQuestion = quizQuestions[currentIndex];
 
-    if (currentIndex < quizSets[currentSetIndex].length) {
-        showQuestion();
-    } else {
-        // 顯示結束訊息
-        alert(`本組測驗結束！總分:${score}`);
+        if (userAnswer === currentQuestion.correctAnswer.toLowerCase()) {
+            alert("答對了！");
+        } else {
+            alert(`答錯了，正確答案是：${currentQuestion.correctAnswer}`);
+        }
 
-        // 重置索引，準備顯示下一組問題
-        currentIndex = 0;
-        currentSetIndex++;
-
-        if (currentSetIndex < quizSets.length) {
-            // 顯示下一組問題
+        // 顯示下一個問題或結束
+        currentIndex++;
+        if (currentIndex < quizQuestions.length) {
             showQuestion();
         } else {
-            // 所有組都測驗完畢
-            alert("全部測驗結束！")
-		displayAnswers();
+            alert("測驗結束！");
         }
+
+        // 清空輸入框
+        document.getElementById('answer-input').value = "";
     }
-
-
-    // 清空輸入框
-    document.getElementById('answer-input').value = "";
-}
-
-
-
- // 顯示每一題的正確答案
-function displayAnswers() {
-    for (let i = 0; i < quizSets.length; i++) {
-        for (let j = 0; j < quizSets[i].length; j++) {
-            const question = quizSets[i][j];
-            
-            // 檢查是否為陣列
-            const correctAnswers = Array.isArray(question.correctAnswers)
-                ? question.correctAnswers.join(" 或 ")
-                : question.correctAnswers;
-
-            alert(`題目：${question.question}\n正確答案：${correctAnswers}`);
-        }
-    }
-}
-
-	
-	//按Enter送出答案
-document.getElementById('answer-input').addEventListener('keydown', function(event) {
-    // 判斷是否按下 Enter 鍵 (按鍵碼 13)
-    if (event.keyCode === 13) {
-        // 呼叫檢查答案的函式
-        checkAnswer();
-    }
-});
 
     // 載入時初始化測驗
     window.onload = initQuiz;
-
-    // 生成測驗組
-const quizSets = Array.from({ length: 5 }, generateRandomQuizSet);
 </script>
 
 </body>
